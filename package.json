@@ -1,0 +1,33 @@
+{
+  "name": "beautonomy-parser",
+  "version": "1.0.0",
+  "description": "social networks content parser",
+  "main": "source/index.js",
+  "scripts": {
+    "dev": "nodemon source/index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lenchevskii/beautonomy-parser.git"
+  },
+  "keywords": [
+    "node",
+    "redis",
+    "mysql",
+    "puppeteer",
+    "moleculer",
+    "aws"
+  ],
+  "author": "Dzmitry Liancheuski",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/lenchevskii/beautonomy-parser/issues"
+  },
+  "homepage": "https://github.com/lenchevskii/beautonomy-parser#readme",
+  "dependencies": {
+    "moleculer": "^0.14.13",
+    "puppeteer": "^5.5.0",
+    "ramda": "^0.27.1"
+  }
+}
