@@ -1,8 +1,10 @@
 const FS = require('fs')
 
-const { browser } = require('./puppeteer-firefox')
+const puppeteer = require('puppeteer')
 
 const { ServiceBroker } = require('moleculer')
+
+const browser = puppeteer.launch({ product: 'firefox', headless: false })
 
 const trace = (x, ...comment) => { console.log(x, ...comment); return x }
 
