@@ -27,6 +27,8 @@
   "homepage": "https://github.com/lenchevskii/beautonomy-parser#readme",
   "dependencies": {
     "moleculer": "^0.14.13",
+    "nats": "^2.0.2",
+    "node-fetch": "^2.6.1",
     "puppeteer": "^5.5.0",
     "ramda": "^0.27.1"
   }
