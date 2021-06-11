@@ -10,7 +10,7 @@ const MLCLR = require('moleculer')
 
 const puppeteer = require('puppeteer')
 
-const { extractName, trace } = require('./helper')
+const { extractName, trace } = require('../utils/helper')
 
 const browser = puppeteer.launch({
   product: 'firefox',

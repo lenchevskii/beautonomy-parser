@@ -16,8 +16,32 @@ cd beautonomy-parser
 npm ci
 ```
 
-Before launching the project:
+YouTube-DL usage:
 
 ```bash
-$ PUPPETEER_PRODUCT=firefox npm install puppeteer
+youtube-dl --id --skip-download --write-description --write-info-json --write-annotations --write-all-thumbnails --write-sub --write-auto-sub <URL>
 ```
+
+---
+
+***Comments:***
+
+1) [YouTube-DL](https://github.com/ytdl-org/youtube-dl) library have to be installed through the command:
+
+    ```bash
+    pip3 install --upgrade youtube-dl
+    ```
+
+    **Do not forget** (if the `sklearn` installation error occured):
+
+    ```bash
+    python -m pip install --upgrade pip
+    ```
+
+2) [AutSub](https://github.com/abhirooptalasila/AutoSub) project.
+
+    **Do not forget:**
+
+    ```bash
+    mkdir audio output
+    ```
