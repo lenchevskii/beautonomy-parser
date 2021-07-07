@@ -37,6 +37,7 @@
     "module-alias": "^2.2.2",
     "moleculer": "^0.14.13",
     "monet": "^0.9.2",
+    "mysql": "^2.18.1",
     "nats": "^2.0.2",
     "node-fetch": "^2.6.1",
     "popyt": "^5.0.0",
@@ -50,7 +51,10 @@
   },
   "_moduleAliases": {
     "@root": ".",
-    "@helper": "source/utils/helper.js",
-    "@instagram-helper": "source/moleculer-mircoservice/instagram-client/extraction-util/pipe-helper/instagram.helper.js"
+    "@general-helper": "source/utils/general.helper.js",
+    "@general-handler": "source/utils/general.handler.js",
+    "@general-s3-handler": "source/utils/general-s3-util/general.s3.handler.js",
+    "@general-s3-callback": "source/utils/general-s3-util/general.s3.callback.js",
+    "@general-mysql-callback": "source/utils/general-mysql-util/general.mysql.callback.js"
   }
 }
