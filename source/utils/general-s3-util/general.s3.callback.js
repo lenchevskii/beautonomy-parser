@@ -8,6 +8,6 @@ const S3Callback =
   (error, data) =>
     error
       ? H.trace(CLI_COLOR.red(error.message))
-      : R.always()
+      : H.trace(CLI_COLOR.green('S3 processed successfully.'))
 
 module.exports = { S3Callback }

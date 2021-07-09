@@ -1,13 +1,8 @@
 require('module-alias/register')
 
-const H = require('@general-helper')
-const R = require('ramda')
 const MYSQL = require('mysql')
-const G_HANDLER = require('@general-handler')
-const MYSQL_CONNECTION = require('./youtube.resolver.connection')
 const YT_RESOLVER_API = require('./youtube.resolver.API')
 const YT_RESOLVER_HANDLER = require('./youtube.resolver.handler')
-const YT_RESOLVER_PROCESSOR = require('./youtube.resolver.processor')
 
 /**
  * 
@@ -15,9 +10,10 @@ const YT_RESOLVER_PROCESSOR = require('./youtube.resolver.processor')
  * @param {String} linkId YouTube link ID to process
  * @param {Function} processor Sequence of extraction actions
  */
-const extractProductsIO =
+const insertProductsFoundIO =
   (connection, processor, bucketName, bucketS3Path) =>
-    YT_RESOLVER_API.getAllDescriptionFrames(connection, processor, bucketName, bucketS3Path)
+    YT_RESOLVER_API
+      .getAllDescriptionFrames(connection, processor, bucketName, bucketS3Path)
 
 /**
  * 
@@ -49,17 +45,17 @@ const insertDescriptionEndingSetIO =
         )
     )
 
-module.exports = { insertDescriptionBeginningSetIO, insertDescriptionEndingSetIO, extractProductsIO }
+module.exports = { insertDescriptionBeginningSetIO, insertDescriptionEndingSetIO, insertProductsFoundIO }
 
-extractProductsIO(
-  MYSQL_CONNECTION.CONNECTION,
-  YT_RESOLVER_PROCESSOR.extractProducts,
-  'beautonomy-parser',
-  'youtube/Mariah Leonard/20210331 -- The Makeup Techniques That Never Fail Me - My Signature Look _ Mariah Leonard/Kuk07Y8DdAY.info.json'
-)
+// insertProductsFoundIO(
+//   MYSQL_CONNECTION.CONNECTION,
+//   YT_PROCESSOR.processProducts,
+//   'beautonomy-parser',
+//   'youtube/Mariah Leonard/20210331 -- The Makeup Techniques That Never Fail Me - My Signature Look _ Mariah Leonard/Kuk07Y8DdAY.info.json'
+// )
 
-const startsWith = [['Benefit'], ['MERIT'], ['Danessa'], ['UD']]
-const endsWith = [['Corrector'], ['Concealer'], ['Shadowstick'], ['Liner'], ['Bronzer']]
+// const startsWith = [['Tinkle'], ['KVD'], ['Sleek'], ['Glossier'], ['Kash Beauty'], ['Nudestix'], ['Revolution'], ['Kiko'], ['Tatcha'], ['Catrice'], ['Coty'], ['Patrick Ta'], ['Ardell'], ['Pixi + Louise Roe']]
+// const endsWith = [['Wispies'], ['Primer']]
 
 // startsWith.map(x => YT_RESOLVER_API.insertDescriptionBeginning(MYSQL_CONNECTION.CONNECTION, x))
 // endsWith.map(x => YT_RESOLVER_API.insertDescriptionEnding(MYSQL_CONNECTION.CONNECTION, x))
