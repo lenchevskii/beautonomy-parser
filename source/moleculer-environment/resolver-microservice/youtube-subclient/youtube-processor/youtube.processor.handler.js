@@ -1,9 +1,9 @@
 require('module-alias/register')
 
 const R = require('ramda')
+const AWS = require('aws-sdk')
 const G_S3_CALLBACK = require('@general-s3-callback')
 const YT_PROCESSOR_HELPER = require('./youtube.processor.helper')
-const AWS = require('aws-sdk')
 
 const S3 = new AWS.S3()
 
@@ -40,6 +40,16 @@ const constructProductObject =
 
 /**
  * 
+ * @param {Object} file Parsed `.info.json` file 
+ * @param {RegExp} frameRegExp Boundary words Regular Expression
+ * @returns Products used object
+ */
+const constructProductObjectTmpMode =
+  (file, frameRegExp) =>
+    new Object({ products: file.description.match(frameRegExp) })
+
+/**
+ * 
  * @param {[[String]]} frames Boundary words (aka trigger words)
  * @returns 
  */
@@ -55,4 +65,5 @@ module.exports = {
   saveProductsS3: R.curry(saveProductsS3),
   getProductRegExp,
   constructProductObject: R.curry(constructProductObject),
+  constructProductObjectTmpMode: R.curry(constructProductObjectTmpMode)
 }

@@ -60,7 +60,7 @@ youtube-dl --id --skip-download --write-description --write-info-json --write-an
     H.trace('smth')     \\ add tracing function whenever you want to show the result 
     ```
 
-4) [DB extended charset](https://mathiasbynens.be/notes/mysql-utf8mb4):
+4) [DB extended charset](https://mathiasbynens.be/notes/mysql-utf8mb4).
 
     **Notice!**
 
@@ -102,4 +102,26 @@ youtube-dl --id --skip-download --write-description --write-info-json --write-an
     | collation_server         | utf8mb4_unicode_ci |
     +--------------------------+--------------------+
     10 rows in set (0.00 sec)
+    ```
+
+5) Initialize MYSQL DB:
+
+    ```bash
+    mysql> source [Absolute]/beautycrash-parser/youtube.table.sql;
+    ```
+
+6) Running on AWS:
+
+    ```bash
+    nohup npm start &
+    ```
+
+    **Do not forget about AWS S3 Credentials: `.aws/`**
+
+7) If Error is occured on main server (like ```process node [HOME]/.../youtube.resolver.tool.js failed```) check ```youtube-dl``` version and reinstall:
+
+    ```bash
+    sudo apt purge youtube-dl
+    sudo pip3 install youtube-dl
+    sudo apt install youtube-dl
     ```

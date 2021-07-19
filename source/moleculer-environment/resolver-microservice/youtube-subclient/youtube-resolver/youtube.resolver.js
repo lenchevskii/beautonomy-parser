@@ -1,14 +1,18 @@
 require('module-alias/register')
 
+const H = require('@general-helper')
+const R = require('ramda')
 const MYSQL = require('mysql')
+const G_HANDLER = require('@general-handler')
 const YT_RESOLVER_API = require('./youtube.resolver.API')
 const YT_RESOLVER_HANDLER = require('./youtube.resolver.handler')
 
 /**
- * 
+ * Find and save products from description into S3
  * @param {MYSQL.Connection} connection 
- * @param {String} linkId YouTube link ID to process
  * @param {Function} processor Sequence of extraction actions
+ * @param {String} bucketName 
+ * @param {String} bucketS3Path 
  */
 const insertProductsFoundIO =
   (connection, processor, bucketName, bucketS3Path) =>
@@ -16,7 +20,25 @@ const insertProductsFoundIO =
       .getAllDescriptionFrames(connection, processor, bucketName, bucketS3Path)
 
 /**
- * 
+ * Find and save products from description into S3 (temporary directory mode)
+ * @param {MYSQL.Connection} connection 
+ * @param {Function} processor Sequence of extraction actions
+ * @param {String} bucketName 
+ * @param {String} childBucketName
+ * @param {String} directory Temporary directory to read
+ * @param {Boolean} isTmpMode 
+ */
+const insertProductsFoundTmpIO =
+  (connection, processor, bucketName, childBucketName, directory, isTmpMode) =>
+    R.compose(
+      YT_RESOLVER_API
+        .getAllDescriptionFramesTmpMode(directory, childBucketName, connection, processor, R.__, bucketName, isTmpMode),
+      G_HANDLER.getInfoFilePaths,
+      G_HANDLER.getAllFilePaths,
+    )(directory)
+
+/**
+ * Insert Beginning trigger word collection for process products
  * @param {MYSQL.Connection} connection 
  * @param {[[String]]} set Set of values for insertion
  */
@@ -31,7 +53,7 @@ const insertDescriptionBeginningSetIO =
     )
 
 /**
- * 
+ * Insert Ending trigger word collection for process products
  * @param {MYSQL.Connection} connection 
  * @param {[[String]]} set Set of values for insertion
  */
@@ -45,7 +67,12 @@ const insertDescriptionEndingSetIO =
         )
     )
 
-module.exports = { insertDescriptionBeginningSetIO, insertDescriptionEndingSetIO, insertProductsFoundIO }
+module.exports = {
+  insertDescriptionBeginningSetIO,
+  insertDescriptionEndingSetIO,
+  insertProductsFoundTmpIO,
+  insertProductsFoundIO
+}
 
 // insertProductsFoundIO(
 //   MYSQL_CONNECTION.CONNECTION,

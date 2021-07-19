@@ -17,7 +17,7 @@ const trace =
  * @returns Result
  */
 const catchError =
-  (fnc, ...args) => { try { return fnc(...args) } catch (error) { trace(CLI_COLOR.red(error.message)) } }
+  (fnc, ...args) => { try { return fnc(...args) } catch (error) { trace(CLI_COLOR.red(error.message), ...args) } }
 
 const extractName =
   (url) =>

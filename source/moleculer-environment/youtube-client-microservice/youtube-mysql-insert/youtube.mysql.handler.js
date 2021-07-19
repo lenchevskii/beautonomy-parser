@@ -1,5 +1,6 @@
 require('module-alias/register')
 
+const H = require('@general-helper')
 const R = require('ramda')
 const G_HANDLER = require('@general-handler')
 const YT_MYSQL_HELPER = require('./youtube.mysql.helper')
@@ -11,11 +12,14 @@ const YT_MYSQL_HELPER = require('./youtube.mysql.helper')
  */
 const constructYTLinkEntitySet =
   (directory) =>
-    R.compose(
-      YT_MYSQL_HELPER.expandYTLinkEntitySet,
-      G_HANDLER.removeIdenticalSubsets,
-      YT_MYSQL_HELPER.constructYTLinkEntity(directory, R.__),
-      G_HANDLER.getAllFilePaths
-    )(directory)
+    H.catchError(
+      R.compose(
+        YT_MYSQL_HELPER.expandYTLinkEntitySet,
+        G_HANDLER.removeIdenticalSubsets,
+        YT_MYSQL_HELPER.constructYTLinkEntity(directory, R.__),
+        G_HANDLER.getAllFilePaths
+      ),
+      directory
+    )
 
 module.exports = { constructYTLinkEntitySet }

@@ -1,13 +1,9 @@
-require('module-alias/register')
-
-const H = require('@general-helper')
-const R = require('ramda')
 const FS = require('fs')
 const CP = require('child_process')
 const PATH = require('path')
-const CLI_COLOR = require('cli-color')
+const UUID = require('uuid')
 
-const SAVING_DIRECTORY = PATH.join(__dirname, 'youtube-tmp-data')
+const SAVING_DIRECTORY = PATH.join(__dirname, 'youtube-tmp-data', UUID.v4())
 
 const OUTPUT_TEMPLATE = PATH.join(
   SAVING_DIRECTORY,
@@ -17,28 +13,26 @@ const OUTPUT_TEMPLATE = PATH.join(
 )
 
 /**
- * 
- * @param {String} youtubeVideoURL URL through which data have to be obtained
+ * `Child Process` for downloading YouTube data via `YouTube-DL` library
+ * @param {String} aim URL through which data have to be obtained (accepts `ChannelURL`|`VideoURL`|`VideoID`)
+ * @param {String|Number} dateafter Only videos uploaded on or after this date
  */
 const downloadYouTubeDataIO =
-  (youtubeVideoURL) =>
+  (aim, dateafter) =>
     CP.exec(
       "youtube-dl" +
       " --skip-download" +
-      // " --write-description" +
+      ` --dateafter ${Number(dateafter)}` +
+      " --write-description" +
       " --write-info-json" +
-      // " --write-all-thumbnails" +
+      " --write-all-thumbnails" +
       " --write-sub" +
       " --write-auto-sub" +
       " --rm-cache-dir" +
       " -w" +
       ` -o '${OUTPUT_TEMPLATE}'` +
       " " +
-      youtubeVideoURL,
-      (err, stdout, stderr) =>
-        err
-          ? H.trace(CLI_COLOR.red('err:'), err)
-          : R.always()
+      aim
     )
 
 /**
@@ -46,6 +40,10 @@ const downloadYouTubeDataIO =
  */
 const clearTemporaryDirectoryIO =
   (savingDirectory) =>
-    FS.rmSync(savingDirectory, { recursive: true, force: true })
+    FS.rm(savingDirectory, { recursive: true, force: true }, () => savingDirectory)
 
-module.exports = { downloadYouTubeDataIO, clearTemporaryDirectoryIO, SAVING_DIRECTORY }
+module.exports = {
+  clearTemporaryDirectoryIO,
+  downloadYouTubeDataIO,
+  SAVING_DIRECTORY
+}

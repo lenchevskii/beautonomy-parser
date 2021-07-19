@@ -1,6 +1,7 @@
 require('module-alias/register')
 
 const R = require('ramda')
+const G_S3_HANDLER = require('@general-s3-handler')
 const YT_RESOLVER_HELPER = require('./youtube.resolver.helper')
 
 /**
@@ -14,4 +15,20 @@ const constructTriggerWordSet =
       YT_RESOLVER_HELPER.expandTriggerWordSet
     )(triggerWordCollection)
 
-module.exports = { constructTriggerWordSet }
+/**
+ * @param {String} directory Temporary directory to read
+ * @param {String} childBucketName 
+ * @param {[String]} infoFilePaths Info file paths collection
+ * @returns {[String]} Bucket S3 paths collection
+ */
+const constructBucketS3PathCollection =
+  (directory, childBucketName, infoFilePaths) =>
+    infoFilePaths.map(
+      infoFilePath =>
+        G_S3_HANDLER.constructBucketS3Path(directory, childBucketName, infoFilePath)
+    )
+
+module.exports = { 
+  constructTriggerWordSet,
+  constructBucketS3PathCollection: R.curry(constructBucketS3PathCollection)
+}

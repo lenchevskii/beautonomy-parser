@@ -32,6 +32,15 @@ const getAllFilePaths =
     H.catchError(R.compose(R.flatten, getAllFilesPathR), directory)
 
 /**
+ * Drop all paths except `.info.json`
+ * @param {[String]} paths 
+ * @returns {[String]}
+ */
+const getInfoFilePaths =
+  (paths) =>
+    paths.filter(path => path.endsWith('.info.json'))
+
+/**
  * 
  * @param {[[*]]} collection 
  */
@@ -41,4 +50,8 @@ const removeIdenticalSubsets =
       .from(new Set(collection.map(JSON.stringify)))
       .map(JSON.parse)
 
-module.exports = { removeIdenticalSubsets, getAllFilePaths }
+module.exports = { 
+  removeIdenticalSubsets,
+  getInfoFilePaths,
+  getAllFilePaths
+}

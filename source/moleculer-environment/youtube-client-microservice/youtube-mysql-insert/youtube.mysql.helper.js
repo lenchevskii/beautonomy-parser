@@ -1,11 +1,12 @@
 const R = require('ramda')
-const H = require('@general-helper')
 const MYSQL = require('mysql')
 
 /**
- * Inside function, `R.identity` allow to filter empty array elements
+ * Function for contruction arrays with DB values for insertion.
+ * *Inside function, `R.identity` allow to filter empty array elements*
  * @param {String} directory 
  * @param {[String]} paths 
+ * @returns {[[String]]} Array with arrays of DB values
  */
 const constructYTLinkEntity =
   (directory, paths) =>
@@ -21,7 +22,7 @@ const constructYTLinkEntity =
       .map(R.dropLast(1))
 
 /**
- * 
+ * Function for expanding Array with YouTube DB values 
  * @param {[[String]]} collection 
  * @returns Expanded YouTube Entity set ready for insertion
  */
@@ -34,4 +35,7 @@ const expandYTLinkEntitySet =
           `(${link_id}, ${channel}, ${channel_id}, ${upload_date}, ${title})`
       ).toLocaleString()
 
-module.exports = { expandYTLinkEntitySet, constructYTLinkEntity: R.curry(constructYTLinkEntity) }
+module.exports = {
+  expandYTLinkEntitySet,
+  constructYTLinkEntity: R.curry(constructYTLinkEntity)
+}
