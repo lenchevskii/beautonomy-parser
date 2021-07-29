@@ -109,3 +109,4 @@ tmp/
 # Local data
 data/
 youtube-tmp-data/
+*.out

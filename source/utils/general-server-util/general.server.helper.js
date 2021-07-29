@@ -19,6 +19,10 @@ const constructYTChannelLinkFromName =
   (channelName) =>
     `https://www.youtube.com/c/${channelName}`
 
+const constructYTVideoLinkFromID =
+  (videoId) =>
+    `https://www.youtube.com/watch?v=${videoId}`
+
 /**
  * @param {String} link 
  * @returns 
@@ -30,5 +34,6 @@ const checkLinkExistence =
 module.exports = {
   constructYTChannelLinkFromName,
   constructYTChannelLinkFromID,
+  constructYTVideoLinkFromID,
   checkLinkExistence
 }

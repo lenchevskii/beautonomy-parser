@@ -8,4 +8,14 @@ const isYTChannel =
       G_SERVER_HELPER.constructYTChannelLinkFromID
     )(channelId)
 
-module.exports = { isYTChannel }
+const isYTVideo =
+  (videoId) =>
+    R.compose(
+      G_SERVER_HELPER.checkLinkExistence,
+      G_SERVER_HELPER.constructYTVideoLinkFromID
+    )(videoId)
+
+module.exports = { 
+  isYTChannel,
+  isYTVideo
+}

@@ -1,4 +1,3 @@
-const R = require('ramda')
 const CLI_COLOR = require('cli-color')
 
 /**
@@ -19,8 +18,4 @@ const trace =
 const catchError =
   (fnc, ...args) => { try { return fnc(...args) } catch (error) { trace(CLI_COLOR.red(error.message), ...args) } }
 
-const extractName =
-  (url) =>
-    R.head(url.match(/([^/]*)\.jp(e?)g/i, ''))
-
-module.exports = { extractName, catchError, trace }
+module.exports = { catchError, trace }

@@ -1,5 +1,5 @@
-const MYSQL = require('mysql2/promise')
 const CFG = require('dotenv').config().parsed
+const MYSQL = require('mysql2/promise')
 
 const CONNECTION = MYSQL.createConnection({
   host: CFG.MYSQL_HOST,
