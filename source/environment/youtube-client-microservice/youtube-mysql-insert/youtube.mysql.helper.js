@@ -16,7 +16,7 @@ const constructYTLinkEntity =
           R.replace(directory, '', path)
             .split('/')
             .filter(R.identity)                 // Filter empty array elements
-            .map(field => field.split(' -- '))
+            .map(field => field.split(' --=-- '))
       )
       .map(R.flatten)
       .map(R.dropLast(1))

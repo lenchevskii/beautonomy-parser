@@ -14,9 +14,9 @@ const constructOutputTemplate =
   (temporaryDirectory) =>
     PATH.join(
       temporaryDirectory,
-      "%(channel_id)s -- %(channel)s",
-      "%(upload_date)s -- %(title)s",
-      "%(id)s -- .%(ext)s"
+      "%(channel_id)s --=-- %(channel)s",
+      "%(upload_date)s --=-- %(title)s",
+      "%(id)s --=-- .%(ext)s"
     )
 
 module.exports = { 

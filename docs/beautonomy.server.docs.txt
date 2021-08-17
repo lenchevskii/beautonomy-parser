@@ -1,0 +1,66 @@
+SERVERS:                                    RESPONSE:                     NOTIFICATION CHANNELS (SOCKET):                SCHEDULER PROCESS METADATA (REDIS):
+
+Main (Parser) >> host:3000                  {                             notifications:youtube:channel:success          youtube_pid:interval
+MySQL-Access  >> host:3001                    target: target,             notifications:youtube:channel:failure          instagram_pid:interval
+S3-Access     >> host:3002                    id: id,                     notifications:youtube:video:success            reddit_pid:interval
+Scheduler     >> host:3003                    time: time,                 notifications:youtube:video:failure
+Socket        >> host:3004                    message: message            notifications:instagram:post:success
+                                            }                             notifications:instagram:post:failure
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+No method requires hidden values - Body:none                            | All heads belong application/json
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+AIM                 PATH                                                  METHOD                                                                        RETURN
+
+parse channel       host:3000/parse/youtube/channel/:id                 - POST   - :id - channel GUID                                                 - reporting JSON
+parse video         host:3000/parse/youtube/video/:id                   - POST   - :id - video GUID                                                   - reporting JSON
+parse post          host:3000/parse/instagram/post/:shortcode           - POST   - :shortcode - post GUID                                             - reporting JSON
+parse user          host:3000/parse/instagram/user/:username            - POST   - :username - user direct name                                       - reporting JSON
+read docs           host:3000/docs                                      - GET    -                                                                    - .txt
+read README.md      host:3000/readme                                    - GET    -                                                                    - .txt
+
+available channels  host:3001/mysql/youtube/channels                    - GET    -                                                                    - reporting JSON 
+videos of channel   host:3001/mysql/youtube/videos/channel/:id          - GET    - :id - channel GUID                                                 - reporting JSON
+available owners    host:3001/mysql/instagram/owners                    - GET    -                                                                    - reporting JSON
+posts of user       host:3001/mysql/instagram/posts/:username           - GET    - :username - user direct name                                       - reporting JSON
+available authors   host:3001/mysql/reddit/users                        - GET    -                                                                    - reporting JSON
+posts of author     host:3001/mysql/reddit/posts/:author                - GET    - :author - author direct name                                       - reporting JSON
+
+get binary          host:3002/s3/youtube/object/video/:id/:extension    - GET    - :id - video GUID, :extension - file .target.ext (e.g. .info.json)  - reporting JSON with S3 binary
+available objects   host:3002/s3/youtube/objects/video/:id              - GET    - :id - video GUID                                                   - reporting JSON 
+get binary          host:3002/s3/instagram/object/:shortcode/:extension - GET    - :shortcode - post GUID, :extension - file .ext                     - reporting JSON with S3 binary
+available objects   host:3002/s3/instagram/objects/:shortcode           - GET    - :shortcode - post GUID                                             - reporting JSON 
+get binary          host:3002/s3/reddit/object/:id/:extension           - GET    - :id - post GUID, :extension - file .ext                            - reporting JSON with S3 binary
+available objects   host:3002/s3/reddit/objects/:id                     - GET    - :id - post GUID                                                    - reporting JSON 
+
+schedule service    host:3003/schedule/:service/:interval               - POST   - :service - service for scheduling, :interval - interval, min       - reporting JSON 
+kill service        host:3003/kill/:service                             - POST   - :service - service to kill                                         - reporting JSON 
+get metadata        host:3003/process/:service/metadata                 - GET    - :service - information about tagged service                        - reporting JSON 
+
+get notifications   host:3004                                           -        - of type Socket                                                     - message in the corresponding channel
+
+WHERE
+
+:service  = [youtube, instagram, reddit]
+:interval = (1 ... 5000) min
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+SYSTEM DESCRIPTION:
+
+Major (Parser) Server accepts requests to parse Data. Socket server is used to achieve Live mode.
+After sending an :id/:shortcode/etc. to the Server, a channel with the corresponding service name is created and the socket waits for a message.
+After the occurrence of the positive socket message, the files and metadata are available in the S3 and MySQL, respectively.
+
+!! Saving future specific files with a corresponding extension allows them to be available by the server request with an extension.
+Look at some samples to be sure of the accuracy of the file name.
+
+YouTube System is restricted in the processing of 15,000 links per day.
+Reddit System has no restrictions.
+
+POSSIBLE FAILURES:
+
+403 Forbidden 
+429 Too Many Requests
+
+FUTURE IMPROVEMENTS:
+
+The bottleneck lies in a proxy layer under the hood. If the 403/429 errors will occur, this is the time to introduce a new instance of the server.

@@ -2,18 +2,17 @@ require('module-alias/register')
 
 const R = require('ramda')
 const H = require('@general-helper')
-const CLICOLOR = require('cli-color')
-const REDDITHANDLER = require('./reddit.handler')
+const REDDITHANDLER = require('./reddit.extractor.handler')
 
 const Snoowrap = require('snoowrap')
 
 /**
- * 
+ * Function to extract subinformation from last `N` posts at the moment 
  * @param {Snoowrap} oauthClient Reddit Authenticated Client
  * @param {String} subreddit Name of subreddit
  * @param {Number} lastPostsNumber The number of last posts that need to get
- * @param {String} flairName Category of posts (for isntance, 'FOTD')
- * @returns Promised Array of Reddit posts with comments
+ * @param {String} flairName Category of posts (for isntance, `FOTD`)
+ * @returns Promised Array of Reddit posts with comments 
  */
 const extractRedditData =
   (oauthClient, subreddit, lastPostsNumber, flairName) =>
@@ -39,6 +38,8 @@ const extractRedditData =
             )
           )
       )
-      .catch(R.compose(H.trace, CLICOLOR.red))
+      .catch(H.trace)
 
-module.exports = { extractRedditData }
+module.exports = { 
+  extractRedditData: R.curry(extractRedditData)
+}

@@ -1,10 +1,10 @@
-**Beautonomy-parser**
+## Beautonomy-parser
 
 Social networks content parser.
 
 Project has the following architecture:
 
-![](/docs/beautonomy_mining_scheme.jpg)
+![](/docs/beautonomy.parser.scheme.jpg)
 
 App usage:
 
@@ -19,12 +19,14 @@ npm ci
 YouTube-DL usage:
 
 ```bash
-youtube-dl --id --skip-download --write-description --write-info-json --write-annotations --write-all-thumbnails --write-sub --write-auto-sub <URL>
+youtube-dl --id --skip-download --write-description \ 
+--write-info-json --write-annotations --write-all-thumbnails \
+--write-sub --write-auto-sub <URL>
 ```
 
 ---
 
-***Comments:***
+## Comments:
 
 1) [YouTube-DL](https://github.com/ytdl-org/youtube-dl) library have to be installed through the command:
 
@@ -48,7 +50,7 @@ youtube-dl --id --skip-download --write-description --write-info-json --write-an
 
 3) [Alias Register](https://www.npmjs.com/package/module-alias) was used for the general utilities.
 
-    For instance, debug helper:
+    E.g.: debug tracer:
 
     ```bash
     require('module-alias/register')
@@ -57,7 +59,8 @@ youtube-dl --id --skip-download --write-description --write-info-json --write-an
     
     ...
     
-    H.trace('smth')     \\ add tracing function whenever you want to show the result 
+    H.trace('smth', ['optional', 'comments', ...])     \\ add tracing function whenever you want to show the result 
+                                                       \\ inside a call 
     ```
 
 4) [DB extended charset](https://mathiasbynens.be/notes/mysql-utf8mb4).
@@ -104,7 +107,7 @@ youtube-dl --id --skip-download --write-description --write-info-json --write-an
     10 rows in set (0.00 sec)
     ```
 
-5) Initialize MYSQL DB:
+5) Initialize MYSQL DB (if this is a **child instance** - use **parent tables** from **parent server**):
 
     ```bash
     mysql> source [Absolute]/beautycrash-parser/youtube.table.sql;
@@ -125,3 +128,42 @@ youtube-dl --id --skip-download --write-description --write-info-json --write-an
     sudo pip3 install youtube-dl
     sudo apt install youtube-dl
     ```
+
+8) Before starting the servers clean Redis DB.
+
+9) Count code lines in `source/`:
+
+    ```bash
+    find . -name '*.js' | xargs wc -l
+    ```
+
+10) `ssh` run
+    
+    ```bash
+    sudo ssh -i Documents/beautonomy-staging-2.pem ubuntu@35.176.176.54
+    ```
+
+11) Tools env generator:
+
+    Generate and write to the shell paths' aliases for tools presented.
+    E.g.: `some.service.tool.js` which has path `/path/to/some.service.tool.js`, will be resolved as follows:
+
+    ```bash
+    /path/to/some.service.tool.js -> some_service
+    ```
+
+    Now, we can call the service from the environment:
+
+    ```bash
+    ~ node $some_service [--options]
+    ```
+    
+12) Redis error:
+
+    ```bash
+    ../beautycrash-parser/node_modules/redis/index.js:859
+            command_obj.callback(undefinedArgError);
+                                ^
+    ```
+
+    ...means `.env` argument is missed.

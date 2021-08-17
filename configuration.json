@@ -1,0 +1,10 @@
+{
+  "targets": [
+    "youtube",
+    "instagram",
+    "reddit"
+  ],
+  "sources": [
+    "*"
+  ]
+}

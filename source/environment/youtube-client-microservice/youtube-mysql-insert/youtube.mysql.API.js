@@ -10,7 +10,7 @@ const G_MYSQL_CALLBACK = require('@general-mysql-callback')
 const insertYTCollection =
   (connection, valuesYTCollection) =>
     connection.query(
-      'INSERT INTO `processed_YouTube_links` (`link_id`, `channel`, `channel_id`, `upload_date`, `title`) VALUES'
+      'INSERT INTO `processed_youtube_links` (`link_id`, `channel`, `channel_id`, `upload_date`, `title`) VALUES'
       + `${valuesYTCollection.toLocaleString()}`,
       G_MYSQL_CALLBACK.insertMySQLCallback
     )
@@ -25,7 +25,7 @@ const insertYTCollectionByRow =
     valuesYTCollection.map(
       stringifiedValue =>
         connection.query(
-          'INSERT INTO `processed_YouTube_links` (`link_id`, `channel`, `channel_id`, `upload_date`, `title`) VALUES'
+          'INSERT INTO `processed_youtube_links` (`link_id`, `channel`, `channel_id`, `upload_date`, `title`) VALUES'
           + `${stringifiedValue}`,
           G_MYSQL_CALLBACK.insertMySQLCallback
         )

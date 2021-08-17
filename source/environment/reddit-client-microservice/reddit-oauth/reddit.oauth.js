@@ -1,21 +1,12 @@
+const CFG = require('dotenv').config().parsed
 const SNOOWRAP = require('snoowrap')
 
-const {
-  REDDIT_USER_AGENT,
-  REDDIT_CLIENT_ID,
-  REDDIT_CLIENT_SECRET,
-  REDDIT_USERNAME,
-  REDDIT_PASSWORD
-} = require('dotenv').config().parsed
-
-const redditCredentials = {
-  userAgent: REDDIT_USER_AGENT,
-  clientId: REDDIT_CLIENT_ID,
-  clientSecret: REDDIT_CLIENT_SECRET,
-  username: REDDIT_USERNAME,
-  password: REDDIT_PASSWORD
-}
-
-const REDDIT = new SNOOWRAP(redditCredentials)
+const REDDIT = new SNOOWRAP({
+  userAgent: CFG.REDDIT_USER_AGENT,
+  clientId: CFG.REDDIT_CLIENT_ID,
+  clientSecret: CFG.REDDIT_CLIENT_SECRET,
+  username: CFG.REDDIT_USERNAME,
+  password: CFG.REDDIT_PASSWORD
+})
 
 module.exports = { REDDIT }
