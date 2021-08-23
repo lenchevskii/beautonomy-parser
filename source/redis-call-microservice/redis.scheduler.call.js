@@ -45,7 +45,7 @@ const setProcessMetadata =
     ]
 
 module.exports = {
-  getProcessMetadata: getProcessMetadata,
-  delProcessMetadata: delProcessMetadata,
-  setProcessMetadata: setProcessMetadata
+  getProcessMetadata,
+  delProcessMetadata,
+  setProcessMetadata
 }

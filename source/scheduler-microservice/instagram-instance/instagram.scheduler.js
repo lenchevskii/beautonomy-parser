@@ -15,14 +15,13 @@ const IG_SCHEDULER_HANDLER = require('./instagram.scheduler.handler')
 const scheduleIGServiceIO =
   (connection, service, interval) =>
     Promise.resolve(
-      setTimeout(
+      setInterval(
         () =>
           R_ASYNC.pipeAsync(
             IG_SCHEDULER_HANDLER.findLastUserUpdatesIO,
             // IG_SCHEDULER_HANDLER.serviceMapper(R.__, service)
           )(connection),
-        // interval * 60000
-        interval
+        interval * 60000
       )
     ).catch(H.trace)
 

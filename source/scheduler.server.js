@@ -1,11 +1,3 @@
-/**
- * Generate PATH variables for tools' execution with abbreviated names 
- * ! PATHs exist inside current session only - because of the spawn child Bash !
- * 
- * ! Commented for major server mode !
- * require('shelljs').exec('./tool.env.generator.sh')
- */
-
 require('module-alias/register')
 /**
  * Scheduler server autoremove tool clears previous server initialization (Redis DB)
@@ -17,7 +9,7 @@ const H = require('@general-helper')
 const APP = require('express')()
 const CFG = require('dotenv').config().parsed
 const CLI_COLOR = require('cli-color')
-const WHITELIST = JSON.parse(require('fs').readFileSync('./configuration.json')).sources
+const WHITELIST = JSON.parse(require('fs').readFileSync('./configuration.json')).whitelist
 const REDIS_CALL_MS = require('./redis-call-microservice/redis.scheduler.call')
 const G_SERVER_HELPER = require('./utils/general-server-util/general.server.helper')
 const G_SERVER_RESPONSE = require('./utils/general-server-util/general.server.response')
@@ -29,9 +21,9 @@ APP.all(
     G_SERVER_RESPONSE.allowCORS(WHITELIST, response, next)
 )
 
-APP.get(
+APP.post(
   '/schedule/:service/:interval',
-  (request, response) =>
+  async (request, response) =>
     G_SERVER_HELPER.isService(request)
       && G_SERVER_HELPER.isInterval(request)
       ? M.IO(
@@ -49,11 +41,11 @@ APP.get(
         request.params.service,
         null,
         response,
-        `illegal request parameters: (${Object.values(request.params)})`
+        `illegal request parameters: (${Object.values(request.params).join('||')})`
       )
 )
 
-APP.get(
+APP.post(
   '/kill/:service',
   async (request, response) =>
     G_SERVER_HELPER.isService(request)
@@ -73,7 +65,31 @@ APP.get(
         request.params.service,
         null,
         response,
-        `illegal request parameters: (${Object.values(request.params)})`
+        `illegal request parameters: (${Object.values(request.params).join('||')})`
+      )
+)
+
+APP.get(
+  '/info/:service',
+  async (request, response) =>
+    G_SERVER_HELPER.isService(request)
+      ? M.IO(
+        () => REDIS_CALL_MS.getProcessMetadata(request)
+      ).bind(
+        (redisResponse) =>
+          M.IO(
+            async () => SCHEDULER_SERVER_MODE.maybeServiceExistsIO(
+              await redisResponse,
+              request,
+              response
+            )
+          )
+      ).run()
+      : G_SERVER_RESPONSE.unsuccessfulResponse(
+        request.params.service,
+        null,
+        response,
+        `illegal request parameters: (${Object.values(request.params).join('||')})`
       )
 )
 

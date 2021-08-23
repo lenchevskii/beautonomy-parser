@@ -34,7 +34,7 @@ available objects   host:3002/s3/reddit/objects/:id                     - GET   
 
 schedule service    host:3003/schedule/:service/:interval               - POST   - :service - service for scheduling, :interval - interval, min       - reporting JSON 
 kill service        host:3003/kill/:service                             - POST   - :service - service to kill                                         - reporting JSON 
-get metadata        host:3003/process/:service/metadata                 - GET    - :service - information about tagged service                        - reporting JSON 
+get metadata        host:3003/info/:service                             - GET    - :service - information about tagged service                        - reporting JSON 
 
 get notifications   host:3004                                           -        - of type Socket                                                     - message in the corresponding channel
 

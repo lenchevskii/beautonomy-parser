@@ -25,7 +25,7 @@ const youTubeServerModeIO =
           'exit',
           code =>
             CP.execSync(
-              'node $youtube_s3_insert' +
+              'node source/environment/youtube-client-microservice/youtube-s3-insert/youtube.s3.insert.tool.js' +
               ` ${temporaryDirectory}` +
               ` ${CFG.S3_BUCKET}` +
               ` ${CFG.S3_YT_CHILD_BUCKET}`,
@@ -36,7 +36,7 @@ const youTubeServerModeIO =
           code =>
             code === 0
               ? CP.execSync(
-                'node $youtube_mysql_insert' +
+                'node source/environment/youtube-client-microservice/youtube-mysql-insert/youtube.mysql.insert.tool.js' +
                 ` ${temporaryDirectory}`,
                 { stdio: 'inherit' }
               )
@@ -46,7 +46,7 @@ const youTubeServerModeIO =
           code =>
             code === 0
               ? CP.execSync(
-                `node $youtube_resolver` +
+                `node source/environment/resolver-microservice/youtube-instance/youtube.resolver.tool.js` +
                 ` ${CFG.S3_BUCKET}` +
                 ` ${CFG.S3_YT_CHILD_BUCKET}` +
                 ` ${temporaryDirectory}`,
@@ -57,7 +57,7 @@ const youTubeServerModeIO =
           'exit',
           code =>
             CP.execSync(
-              'node $youtube_automaton_remove' +
+              'node source/environment/youtube-client-microservice/youtube-automaton/youtube.automaton.remove.tool.js' +
               ` ${temporaryDirectory}`,
               { stdio: 'inherit' }
             )

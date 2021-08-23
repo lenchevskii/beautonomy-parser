@@ -1,9 +1,4 @@
 /**
- * Generate PATH variables for tools' execution with abbreviated names 
- * ! PATHs exist inside current session only - because of the spawn child Bash !
- */
-require('shelljs').exec('./tool.env.generator.sh')
-/**
  * Load minor servers
  */
 require('./socket.server')
@@ -34,7 +29,7 @@ const G_SERVER_RESPONSE = require('./utils/general-server-util/general.server.re
 const YT_AUTOMATON_HELPER = require('./environment/youtube-client-microservice/youtube-automaton/youtube.automaton.helper')
 
 const README = FS.readFileSync(PATH.join(__dirname, '..', 'README.md')).toString()
-const WHITELIST = JSON.parse(FS.readFileSync('./configuration.json')).sources
+const WHITELIST = JSON.parse(FS.readFileSync('./configuration.json')).whitelist
 
 APP.all(
   '/*',
@@ -51,7 +46,7 @@ APP.post(
           'youtube channel',
           request.params.id,
           response,
-          'youtube channel sent for parsing'
+          'youtube channel was sent for parsing'
         )
       ).takeRight(
         M.IO(
@@ -89,7 +84,7 @@ APP.get(
           'youtube video',
           request.params.id,
           response,
-          'youtube video sent for parsing'
+          'youtube video was sent for parsing'
         )
       ).takeRight(
         M.IO(
@@ -126,13 +121,13 @@ APP.post(
           'instagram post',
           request.params.shortcode,
           response,
-          'instagram post sent for parsing'
+          'instagram post was sent for parsing'
         )
       ).takeRight(
         M.IO(
-          () =>
-            IG_SERVER_MODE
-              .instagramPostServerModeIO(request.params.shortcode)
+          () => IG_SERVER_MODE.instagramPostServerModeIO(
+            request.params.shortcode
+          )
         )
       ).bind(
         (serverModeResult) =>
@@ -143,7 +138,7 @@ APP.post(
             )
           )
       ).run()
-      : G_SERVER_RESPONSE.forParsingFailure(
+      : G_SERVER_RESPONSE.unsuccessfulResponse(
         'instagram post',
         request.params.shortcode,
         response,
@@ -156,11 +151,11 @@ APP.post(
   async (request, response) =>
     await G_SERVER_HELPER.isIGUser(request.params.username)
       ? M.IO(
-        () => G_SERVER_RESPONSE.forParsingSuccess(
+        () => G_SERVER_RESPONSE.successfulResponse(
           'instagram user',
           request.params.username,
           response,
-          'instagram user sent for parsing'
+          'instagram user was sent for parsing'
         )
       ).takeRight(
         M.IO(
@@ -171,13 +166,13 @@ APP.post(
       ).bind(
         (serverModeResult) =>
           M.IO(
-            () => REDIS_MAIN_CALL.reportIGPost(
+            () => REDIS_MAIN_CALL.reportIGUser(
               serverModeResult,
               request.params.username
             )
           )
       ).run()
-      : G_SERVER_RESPONSE.forParsingFailure(
+      : G_SERVER_RESPONSE.unsuccessfulResponse(
         'instagram user',
         request.params.username,
         response,

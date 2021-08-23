@@ -73,7 +73,30 @@ const killTargetedServiceIO =
         `${request.params.service} scheduler doesn't exist yet`
       )
 
+/**
+ * Monad provide scheduler information : `pid`, `interval`
+ * @param {String} redisResponse 
+ * @param {EXPRESS.Request} request 
+ * @param {EXPRESS.Response} response 
+ */
+const maybeServiceExistsIO =
+  (redisResponse, request, response) =>
+    redisResponse
+      ? G_SERVER_RESPONSE.successfulResponse(
+        request.params.service,
+        R.head(redisResponse.split(':')),
+        response,
+        `${request.params.service} scheduler exists with an interval: ${R.last(redisResponse.split(':'))} min`
+      )
+      : G_SERVER_RESPONSE.unsuccessfulResponse(
+        request.params.service,
+        null,
+        response,
+        `${request.params.service} scheduler doesn't exist yet`
+      )
+
 module.exports = {
   runTargetedServiceIO,
-  killTargetedServiceIO
+  killTargetedServiceIO,
+  maybeServiceExistsIO
 }

@@ -11,13 +11,13 @@ const CFG = require('dotenv').config().parsed
 const redditServerModeIO =
   (lastPostsNumber) =>
     CP.fork(
-      process.env.reddit_server_processing, // is equal to 'source/environment/reddit-client-microservice/reddit.server.processing.tool.js'
+      'source/environment/reddit-client-microservice/reddit.server.processing.tool.js'
       [
         CFG.REDDIT_SUBREDDIT,
         lastPostsNumber,
         CFG.REDDIT_FLAIR_NAME,
         CFG.S3_BUCKET,
-        CFG.S3_RD_CHILD_BUCKET,
+        CFG.S3_RD_CHILD_BUCKET
       ]
     )
 

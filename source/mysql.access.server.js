@@ -1,11 +1,3 @@
-/**
- * Generate PATH variables for tools' execution with abbreviated names 
- * ! PATHs exist inside current session only - because of the spawn child Bash !
- * 
- * Commented for major server mode:
- * require('shelljs').exec('./tool.env.generator.sh')
- */
-
 require('module-alias/register')
 
 const M = require('monet')
@@ -13,7 +5,7 @@ const H = require('@general-helper')
 const APP = require('express')()
 const CFG = require('dotenv').config().parsed
 const CLI_COLOR = require('cli-color')
-const WHITELIST = JSON.parse(require('fs').readFileSync('./configuration.json')).sources
+const WHITELIST = JSON.parse(require('fs').readFileSync('./configuration.json')).whitelist
 const G_SERVER_RESPONSE = require('./utils/general-server-util/general.server.response')
 const YT_MYSQL_ACCESS_MS = require('./mysql-access-microservice/youtube-instance/youtube.mysql.access')
 const IG_MYSQL_ACCESS_MS = require('./mysql-access-microservice/instagram-instance/instagram.mysql.access')
@@ -114,7 +106,7 @@ APP.get(
 )
 
 APP.get(
-  '/mysql/reddit/users',
+  '/mysql/reddit/authors',
   async (_, response) =>
     M.IO(
       async () =>

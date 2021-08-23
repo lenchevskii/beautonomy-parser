@@ -11,7 +11,7 @@ const scheduleRDServiceIO =
     Promise.resolve(
       setTimeout(
         () => R.compose(service, Number)(lastPostsNumber),
-        interval * 1000
+        interval * 60000
       )
     )
 

@@ -15,13 +15,13 @@ const SCHEDULER_HANDLER = require('./youtube.scheduler.handler')
 const scheduleYTServiceIO =
   (connection, service, interval) =>
     Promise.resolve(
-      setTimeout(
+      setInterval(
         () =>
           R_ASYNC.pipeAsync(
             SCHEDULER_HANDLER.findLastChannelUpdatesIO,
             SCHEDULER_HANDLER.serviceMapper(R.__, service)
           )(connection),
-        Number(interval) * 60000
+        interval * 60000
       )
     ).catch(H.trace)
 

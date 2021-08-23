@@ -55,8 +55,24 @@ const reportIGPost =
           : REDIS_CLIENT.publish(CFG.REDIS_IG_FAILURE_POST, id)
     )
 
+/**
+ * Instagram user messanger 
+ * @param {CP.ChildProcess} childProcess 
+ * @param {String} id
+ */
+const reportIGUser =
+  (childProcess, id) =>
+    childProcess.on(
+      'exit',
+      (code) =>
+        code === 0
+          ? REDIS_CLIENT.publish(CFG.REDIS_IG_SUCCESS_USER, id)
+          : REDIS_CLIENT.publish(CFG.REDIS_IG_FAILURE_USER, id)
+    )
+
 module.exports = {
   reportYTChannel,
   reportYTVideo,
-  reportIGPost
+  reportIGPost,
+  reportIGUser
 }
